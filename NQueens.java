@@ -6,15 +6,15 @@ class Solution {
         //stores all the queen location
         List<List<String>> result = new ArrayList<>();
 
-        boolean[][] visited = new boolean[n][n];
+        boolean[][] board = new boolean[n][n];
 
         //we will start with [0,0] and try all possible combinations(exhaustive approach)
-        backtrack(0, n, result, visited);
+        backtrack(0, n, result, board);
         return result;
     }
 
     //if a queen is in same row, col or diagonal it can be attacked. Hence we should avoid that
-    public void backtrack(int row, int n, List<List<String>> result, boolean[][] visited) {
+    public void backtrack(int row, int n, List<List<String>> result, boolean[][] board) {
 
         //base condition
         //if all spacing is correct
@@ -30,7 +30,7 @@ class Solution {
 
                 for(int j = 0; j < n; j++) {
 
-                    if(visited[i][j])
+                    if(board[i][j])
                         sb.append('Q');
                     else
                         sb.append('.');
@@ -52,25 +52,25 @@ class Solution {
             //no queens already placed on both top left and top right diagonal
             //we do not check bottom col because we have not gone below yet
             //row not checked because we only select 1 index on a row at a time
-            if(checkSpace(row, col, n, visited)) {
+            if(isSafe(row, col, n, board)) {
 
                 //action:- mark as visited
-                visited[row][col] = true;
+                board[row][col] = true;
                 //recurse
-                backtrack(row + 1, n, result, visited);
+                backtrack(row + 1, n, result, board);
                 //backtrack:- mark as unvisited : as we move queen now
-                visited[row][col] = false;
+                board[row][col] = false;
             }
         }
     }
 
     //here we check there is no queen on same column, up left diagonal, up right diagonal
-    public boolean checkSpace(int r, int c, int n, boolean[][] visited) {
+    public boolean isSafe(int r, int c, int n, boolean[][] board) {
 
         //if there is any queen in same columnn return false
         for(int row = r - 1; row >= 0; row--) {
 
-            if(visited[row][c])
+            if(board[row][c])
                 return false;
         }
 
@@ -80,7 +80,7 @@ class Solution {
 
         while(i >= 0 && j >= 0) {
 
-            if(visited[i][j])
+            if(board[i][j])
                 return false;
             i--;
             j--;
@@ -92,7 +92,7 @@ class Solution {
 
         while(i >= 0 && j < n) {
 
-            if(visited[i][j])
+            if(board[i][j])
                 return false;
             
             i--;
